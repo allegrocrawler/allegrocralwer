@@ -3,6 +3,7 @@ package allegrocrawler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Slf4j
 @EnableJpaRepositories
 @SpringBootApplication
-public class Main {
+public class Main extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception {
         log.info("App starting");
