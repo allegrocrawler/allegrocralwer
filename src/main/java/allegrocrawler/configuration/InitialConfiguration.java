@@ -23,6 +23,7 @@ public class InitialConfiguration {
     @PostConstruct
     public void runAll() {
         List<Method> methods = Lists.newArrayList(InitialScripts.class.getDeclaredMethods());
+        methods.sort((method, method2) -> method.getName().compareTo(method2.getName()));
 
         methods.forEach(method -> {
             try {

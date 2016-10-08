@@ -27,25 +27,19 @@ public class InitialScripts {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
-    private void setRolesOnNulls() {
-        setUserIfNone();
-        Iterable<UserDefinition> all = userRepository.findAll();
-        Role role = userRoleRepository.findByRole(RoleEnum.ROLE_USER);
-        for (UserDefinition userDefinition : all) {
-            List<UserRole> roles = userDefinition.getRoles();
-            if (roles == null || Iterables.isEmpty(roles)) {
-                UserRole userRole = new UserRole();
-                userRole.setUserDefinition(userDefinition);
-                userRole.setRole(role);
+    private void script001_initializeRoles() {
+        Iterable<Role> all = userRoleRepository.findAll();
+        if (all == null || Iterables.isEmpty(all)) {
+            for (RoleEnum roleEnum : RoleEnum.values()) {
+                Role role = new Role();
+                role.setRole(roleEnum);
 
-                userDefinition.setRoles(Lists.newArrayList(userRole));
-                userRepository.save(userDefinition);
+                userRoleRepository.save(role);
             }
         }
     }
 
-    private void setUserIfNone() {
-        initializeRoles();
+    private void script002_setUserIfNone() {
         Iterable<UserDefinition> all = userRepository.findAll();
 
         if (Iterables.isEmpty(all)) {
@@ -65,14 +59,18 @@ public class InitialScripts {
         }
     }
 
-    private void initializeRoles() {
-        Iterable<Role> all = userRoleRepository.findAll();
-        if (all == null || Iterables.isEmpty(all)) {
-            for (RoleEnum roleEnum : RoleEnum.values()) {
-                Role role = new Role();
-                role.setRole(roleEnum);
+    private void script003_setRolesOnNulls() {
+        Iterable<UserDefinition> all = userRepository.findAll();
+        Role role = userRoleRepository.findByRole(RoleEnum.ROLE_USER);
+        for (UserDefinition userDefinition : all) {
+            List<UserRole> roles = userDefinition.getRoles();
+            if (roles == null || Iterables.isEmpty(roles)) {
+                UserRole userRole = new UserRole();
+                userRole.setUserDefinition(userDefinition);
+                userRole.setRole(role);
 
-                userRoleRepository.save(role);
+                userDefinition.setRoles(Lists.newArrayList(userRole));
+                userRepository.save(userDefinition);
             }
         }
     }
