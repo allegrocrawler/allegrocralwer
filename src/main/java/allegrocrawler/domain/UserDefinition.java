@@ -13,8 +13,6 @@ import java.util.List;
 @Table
 public class UserDefinition {
 
-    @OneToMany
-    List<UserRole> roles;
     @Id
     @SequenceGenerator(name = "user_SQ", sequenceName = "usersq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_SQ")
@@ -23,5 +21,7 @@ public class UserDefinition {
     private String username;
     @Column
     private String password;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "userDefinition")
+    private List<UserRole> roles;
 
 }
