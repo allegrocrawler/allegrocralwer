@@ -2,7 +2,6 @@ package allegrocrawler.service;
 
 import allegrocrawler.domain.UserDefinition;
 import allegrocrawler.repository.UserRepository;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +21,6 @@ public class UserDetailsService implements org.springframework.security.core.use
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDefinition byUsername = userRepository.findByUsername(username);
 
-        return new User(byUsername.getUsername(), byUsername.getPassword(), Lists.newArrayList());
+        return new User(byUsername.getUsername(), byUsername.getPassword(), byUsername.getRoles());
     }
 }

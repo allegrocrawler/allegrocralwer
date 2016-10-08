@@ -1,6 +1,7 @@
 package allegrocrawler.domain;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Data
-public class UserRole {
+public class UserRole implements GrantedAuthority {
 
     @Id
     @SequenceGenerator(name = "userrole_SQ", sequenceName = "userrolesq")
@@ -22,4 +23,8 @@ public class UserRole {
     @ManyToOne
     private Role role;
 
+    @Override
+    public String getAuthority() {
+        return role == null ? null : role.getRole().toString();
+    }
 }
