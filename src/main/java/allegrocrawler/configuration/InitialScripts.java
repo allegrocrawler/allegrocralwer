@@ -10,6 +10,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,6 +29,11 @@ public class InitialScripts {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     private void script001_initializeRoles() {
         Iterable<Role> all = userRoleRepository.findAll();
@@ -52,7 +60,7 @@ public class InitialScripts {
             userRole.setRole(role);
             userDefinition.setRoles(Lists.newArrayList(userRole));
             userDefinition.setUsername("test");
-            userDefinition.setPassword("test");
+            userDefinition.setPassword(passwordEncoder().encode("test"));
 
             userRepository.save(userDefinition);
             System.out.println();
