@@ -1,9 +1,9 @@
 package allegrocrawler.configuration;
 
-import com.google.common.base.Optional;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.net.URI;
@@ -19,7 +19,12 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource dataSource() throws URISyntaxException {
-        URI dbUri = new URI(Optional.fromNullable(System.getenv(DATABASE_URL)).or(System.getProperty(DATABASE_URL)));
+        String env = System.getenv(DATABASE_URL);
+        String property = System.getProperty(DATABASE_URL);
+
+        String url = StringUtils.isEmpty(env) ? property : env;
+
+        URI dbUri = new URI(url);
 
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
